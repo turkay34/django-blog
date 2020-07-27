@@ -83,14 +83,17 @@ def comment_add(request, slug):
         return HttpResponseBadRequest #hata ver
     post = get_object_or_404(makale, slug=slug) #method GET değil ise makalenin slugunu al ve post değişkenine at
     form = CommentForm(data=request.POST) #form değişkeninde bir CommentForm oluştur ve datasına POST'tan geleni at
+    print(form)
     if form.is_valid():
         new_comment = form.save(commit=False) #değişkene form'a gelenleri ata ama saveleme
         print(new_comment)
         new_comment.post = post #değişkende ki değerleri ilgili makaleye attık (.post foreignkey için tutuldu)
         post.save()
+        form.save()
         messages.success(request, 'Yorumunuz eklendi.')
         return HttpResponseRedirect(post.get_absolute_url()) #absolute_url ile makaleye geri dönüş yaptı
-    messages.error(request, 'Yorumunuz eklenemedi.')
+    messages.warning(request, 'Yorumunuz eklenemedi.')
+    return HttpResponseRedirect(post.get_absolute_url())
 
 #models.py'den kalıtım alan forms.py'den gelen:
 
