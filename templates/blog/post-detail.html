@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ makale.title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-6 offset-lg-3">
+            <h1 class="text-center"><a href="{% url 'post-list' %}"><i class="fas fa-arrow-circle-left pr-4"></i></a>{{ makale.title }}</h1>
+            <i>{{ makale.get_yayin_tipi|safe }}</i>
+            <hr>
+        </div>
+        {% if makale.get_file %}
+            <div class="col-lg-6 offset-lg-3">
+                <img src="{{ makale.get_file }}" class="img-fluid max-width:100%" alt="">
+            </div>
+        {% endif %}
+        <div class="col-lg-12">
+            <p class="mt-4 text-center"><small>{{ makale.kategori.all|join:',' }}</small></p>
+            <p class="text-center mt-2">{{ makale.content|safe }}</p>
+        </div>
+        <div class="col-lg-8 offset-lg-2">
+            <p class="mt-4 text-center"><small>{{ makale.created_date }}</small></p>
+            <br>
+            <a class="float-left btn btn-primary mr-2 mt-4" href="{% url 'update' makale.slug %}"><i class="fas fa-pen"></i> Güncelle</a>
+            <a class="float-right btn btn-danger mr-2 mt-4" href="{% url 'delete' makale.slug %}"><i class="fas fa-trash"></i> Sil</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <h2 class="page-header mt-4">Yorumlar ({{ makale.get_post_comment|length }})</h2>
+        <hr>
+    </div>
+    {% for comment in makale.get_post_comment %}
+    <div class="col-lg-8 offset-lg-2">
+        <div class="box mb-4 ml-4">
+            <div class="col-lg-12">
+                <p class="ml-2">{{ comment.isim }} {% if comment.soyisim %} {{ comment.soyisim }} {% endif %}</p>
+                <p>{{ comment.yorum|safe }}</p>
+                <p class="text-right"><small>{{ comment.comment_date }}</small></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <h2 class="page-header">Yorum Ekle</h2>
+        <form action="{% url 'comment_add' makale.slug %}" method="post">
+            {% csrf_token %}
+            {{ form.media}}
+            {% for field in form %}
+                <div class="row">
+                    <div class="col-lg-9 offset-lg-2">
+                        <div class="form-group">
+                            {{ field.label_tag}}
+                            {{ field }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-lg-12 d-flex justify-content-end">
+                    <input type="submit" value="Gönder" class="btn btn-success ">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

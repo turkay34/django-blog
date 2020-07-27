@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    İletişim
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+        <div class="col-lg-5">
+            <div>
+                <form method="get" action="{% url 'iletisim' %}"> <!--get metodu url'den iletisim_formu calistirir -->
+                    <h1 class="ml-2">İletişim</h1>
+                    <hr>
+                    <div class="form-group mt-3">
+                        <div class="col-lg-8 offset-lg-2">
+                            {{ form }}
+                            <input type="submit" value="Gönder" class="btn btn-success mt-2 ml-3">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <h1 class="ml-2">Mesajlar</h1>
+            <hr>
+            {% for mesaj in mesajlar %}
+                <div class="form-group">
+                    <p class="lead">{{mesaj.isim}} {{mesaj.soyisim}} {{mesaj.email}} {{mesaj.icerik}}</p>
+                </div>
+            {% empty %}
+                <p>Henüz gönderilmiş bir mesaj yok.</p>
+            {% endfor %}
+        </div>
+
+</div>
+
+{% endblock %}

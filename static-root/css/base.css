@@ -1,0 +1,12 @@
+h1 {
+    color: red;
+}
+.fa-arrow-circle-left{
+    color: red;
+}
+.fa-arrow-circle-left:hover{
+    color: blue;
+}
+h3 {
+    color: magenta;
+}
